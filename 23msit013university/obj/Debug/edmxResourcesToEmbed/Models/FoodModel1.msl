@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="FOODDBModel1StoreContainer" CdmEntityContainer="FOODDBEntities1">
+    <EntitySetMapping Name="TBLFoods">
+      <EntityTypeMapping TypeName="FOODDBModel1.TBLFood">
+        <MappingFragment StoreEntitySet="TBLFood">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Cuisine" ColumnName="Cuisine" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="isSpicy" ColumnName="isSpicy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

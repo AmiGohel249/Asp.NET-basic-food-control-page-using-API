@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Home</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class=" container p-5 mt-5 text-dark-emphasis">
+        <table class="table table-info table-striped" id="fooddata">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Cuisine</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>isSpicy</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <form class="mt-5">
+            <div class="mb-3">
+                <label class="form-label">ID</label>
+                <input type="text" class="form-control" id="txtid" placeholder="ID">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="txtname" placeholder="Name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cuisine</label>
+                <input type="text" maxlength="12" class="form-control" id="txtcuisine"
+                    placeholder="Enter Cuisine">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input type="text" class="form-control" id="txtprice"
+                    placeholder="Enter Price">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Quantity</label>
+                <input type="number"  class="form-control" id="txtqty"
+                    placeholder="Enter Quantity">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">isSpicy</label>
+                <input type="text"  class="form-control" id="txtisspicy"
+                    placeholder="Enter Yes or No For Spiciness">
+            </div>
+            <div class="btn btn-info" id="btnAdd">Add Data</div>
+        </form>
+    </div>
+    <script src="jquery.js" defer></script>
+    <script src="js/bootstrap.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchData);
+        document.querySelector('#btnAdd').addEventListener('click', adddata);
+       
+        function fetchData() {
+            $.ajax({
+                url: 'http://localhost:58674/api/food',
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    const tbody = document.querySelector('#fooddata').children[1];
+                    tbody.innerHTML = '';
+                    for (var i = 0; i < response.length; i++) {
+                        var tr = document.createElement('tr');
+
+                        //to change color of field if it write yes or no .
+
+                        if(response[i]['isSpicy'].toLowerCase() === 'yes'){
+                            tr.style.backgroundColor = 'red';
+                        }
+                        if(response[i]['Quantity']>10){
+                            tr.style.borderColor = 'red';
+                        }
+                        var price = response[i]['Price'];
+                        if(response[i]['Cuisine'].toLowerCase()==='maxican'&& [i]['Quantity'] > 2) {
+                        price /= 2;
+                    }
+
+                        tr.innerHTML =
+                            `<td>${response[i]['Id']}</td>
+                        <td>${response[i]['Name']}</td>
+                        <td>${response[i]['Cuisine']}</td>
+                        <td>${response[i]['Price']}</td>    
+                        <td>${response[i]['Quantity']}</td>
+                        <td>${response[i]['isSpicy']}</td>
+                        `
+                        tbody.appendChild(tr);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', status, error);
+                }
+            });
+        }
+
+        function adddata() {
+             if (document.querySelector('#txtid').value.trim() === '') {
+
+            alert("Please enter Id");
+
+             }
+
+             else if (document.querySelector('#txtname').value.trim() === '') {
+
+             alert("Please enter Name");
+
+         }
+
+         else if (document.querySelector('#txtcuisine').value.trim() === '') {
+
+             alert("Please enter Cuisine");
+             }
+             else if (document.querySelector('#txtprice').value.trim() === '') {
+
+             alert("Please enter Price");
+             }
+            else if (document.querySelector('#txtqty').value.trim() === '') {
+
+            alert("Please enter Quantity");
+
+            }
+            else if (document.querySelector('#txtisspicy').value.trim() === '') {
+
+            alert("Please Enter Yes or No For Spicines");
+
+            }
+
+ else {
+
+ const foodd = {
+
+ 'id': document.querySelector('#txtid').value,
+
+'name': document.querySelector('#txtname').value,
+
+ 'Cuisine': document.querySelector('#txtcuisine').value,
+
+'Price': document.querySelector('#txtprice').value,
+
+ 'Quantity': document.querySelector('#txtqty').value,
+
+ 'isSpicy':document.querySelector('#txtisspicy').value
+
+
+ }
+
+const stringifiedData = JSON.stringify(foodd);
+
+ console.log(foodd);
+
+ $.ajax({
+
+ url: 'http://localhost:58674/api/food' ,
+
+type: 'POST',
+
+data: stringifiedData,
+contentType: 'application/json',
+
+ success: function (response) {
+
+console.log(response);
+
+ if (response['output']) {
+
+ console.log(foodd);
+
+fetchData();}
+
+ else {
+
+ alert(response["message"]);}},
+
+ error: function (xhr, status, error) {
+ console.error('Error:', status, error);
+
+ }
+});
+
+  
+ }
+}
+
+
+    </script>
+    
+</body>
+
+</html>
